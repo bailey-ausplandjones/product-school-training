@@ -1,0 +1,187 @@
+{
+  "run_date": "2026-10-02",
+  "current": {
+    "week": "5",
+    "overall": {
+      "n": 100,
+      "d7_c": 61,
+      "brk_c": 45,
+      "d7": 61.0,
+      "brk": 45.0
+    },
+    "channels": {
+      "organic": {
+        "n": 34,
+        "d7_c": 28,
+        "brk_c": 13,
+        "d7": 82.3529411764706,
+        "brk": 38.23529411764706
+      },
+      "paid": {
+        "n": 33,
+        "d7_c": 19,
+        "brk_c": 19,
+        "d7": 57.57575757575758,
+        "brk": 57.57575757575758
+      },
+      "referral": {
+        "n": 33,
+        "d7_c": 14,
+        "brk_c": 13,
+        "d7": 42.42424242424242,
+        "brk": 39.39393939393939
+      }
+    },
+    "unknown_channels": [],
+    "variants": [
+      "comeback",
+      "control"
+    ]
+  },
+  "previous": {
+    "week": "4",
+    "overall": {
+      "n": 100,
+      "d7_c": 27,
+      "brk_c": 35,
+      "d7": 27.0,
+      "brk": 35.0
+    },
+    "channels": {
+      "organic": {
+        "n": 34,
+        "d7_c": 10,
+        "brk_c": 14,
+        "d7": 29.41176470588235,
+        "brk": 41.1764705882353
+      },
+      "paid": {
+        "n": 34,
+        "d7_c": 5,
+        "brk_c": 12,
+        "d7": 14.705882352941176,
+        "brk": 35.294117647058826
+      },
+      "referral": {
+        "n": 32,
+        "d7_c": 12,
+        "brk_c": 9,
+        "d7": 37.5,
+        "brk": 28.125
+      }
+    },
+    "unknown_channels": [],
+    "variants": []
+  },
+  "analysis": {
+    "d7": {
+      "cur": 61.0,
+      "prev": 27.0,
+      "delta": 34.0,
+      "p": 1.2768450307897524e-06,
+      "good": true,
+      "alert": true,
+      "significant": true,
+      "n_cur": 100,
+      "n_prev": 100,
+      "reliable": true
+    },
+    "brk": {
+      "cur": 45.0,
+      "prev": 35.0,
+      "delta": 10.0,
+      "p": 0.14891467317876558,
+      "good": false,
+      "alert": true,
+      "significant": false,
+      "n_cur": 100,
+      "n_prev": 100,
+      "reliable": true
+    },
+    "channels": {
+      "organic": {
+        "d7": {
+          "cur": 82.3529411764706,
+          "prev": 29.41176470588235,
+          "delta": 52.941176470588246,
+          "p": 1.1017736073745702e-05,
+          "good": true,
+          "alert": true,
+          "significant": true,
+          "n_cur": 34,
+          "n_prev": 34,
+          "reliable": false
+        },
+        "brk": {
+          "cur": 38.23529411764706,
+          "prev": 41.1764705882353,
+          "delta": -2.941176470588239,
+          "p": 0.8042541222142779,
+          "good": true,
+          "alert": true,
+          "significant": false,
+          "n_cur": 34,
+          "n_prev": 34,
+          "reliable": false
+        }
+      },
+      "paid": {
+        "d7": {
+          "cur": 57.57575757575758,
+          "prev": 14.705882352941176,
+          "delta": 42.869875222816404,
+          "p": 0.00025333628092047216,
+          "good": true,
+          "alert": true,
+          "significant": true,
+          "n_cur": 33,
+          "n_prev": 34,
+          "reliable": false
+        },
+        "brk": {
+          "cur": 57.57575757575758,
+          "prev": 35.294117647058826,
+          "delta": 22.281639928698752,
+          "p": 0.06744051101957577,
+          "good": false,
+          "alert": true,
+          "significant": false,
+          "n_cur": 33,
+          "n_prev": 34,
+          "reliable": false
+        }
+      },
+      "referral": {
+        "d7": {
+          "cur": 42.42424242424242,
+          "prev": 37.5,
+          "delta": 4.924242424242422,
+          "p": 0.6853718891538987,
+          "good": true,
+          "alert": true,
+          "significant": false,
+          "n_cur": 33,
+          "n_prev": 32,
+          "reliable": false
+        },
+        "brk": {
+          "cur": 39.39393939393939,
+          "prev": 28.125,
+          "delta": 11.268939393939391,
+          "p": 0.3371054118948304,
+          "good": false,
+          "alert": true,
+          "significant": false,
+          "n_cur": 33,
+          "n_prev": 32,
+          "reliable": false
+        }
+      }
+    },
+    "dropped_channels": []
+  },
+  "alerts": {
+    "d7": true,
+    "brk": true
+  }
+}
