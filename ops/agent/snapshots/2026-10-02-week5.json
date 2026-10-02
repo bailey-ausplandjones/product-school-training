@@ -1,0 +1,50 @@
+{
+  "run_date": "2026-10-02",
+  "current": {
+    "week": "5",
+    "users": 100,
+    "d7": {
+      "c": 61,
+      "n": 100,
+      "rate": 61.0
+    },
+    "break": {
+      "c": 45,
+      "n": 100,
+      "rate": 45.0
+    },
+    "sessions_per_user": 4.5,
+    "session_total": 450,
+    "push_open": {
+      "c": 10,
+      "n": 45,
+      "rate": 22.22222222222222
+    },
+    "variants": [
+      "comeback",
+      "control"
+    ]
+  },
+  "previous": {
+    "week": "4",
+    "users": 100,
+    "d7": {
+      "c": 27,
+      "n": 100,
+      "rate": 27.0
+    },
+    "break": {
+      "c": 35,
+      "n": 100,
+      "rate": 35.0
+    },
+    "sessions_per_user": 3.2,
+    "session_total": 320,
+    "push_open": {
+      "c": 6,
+      "n": 29,
+      "rate": 20.689655172413794
+    },
+    "variants": []
+  }
+}
