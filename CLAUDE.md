@@ -35,7 +35,7 @@ Done: research → decision brief → prototype → roleplay test → triad sess
 2. Raj's feasibility re-scope. His "doable, no new data sources" yes was scoped against a one-tap **freeze** (a flag set before the day boundary). The prototype does a full retroactive **restore** of a value the system already overwrote — new persisted state, not new logic. He has not re-estimated. This is the objection most likely to kill the initiative.
 3. Lena owes four states; the "did I open the wrong app" track-identity problem is patched (`· Meditation` header), not solved.
 4. Implementation sprint start date — TBD.
-5. Module 6 is unstarted: agent stack (metric pulse / weekly insight / anomaly→hypothesis) and the final presentation are still placeholders.
+5. Module 6 agent stack **built, none scheduled** — four agents + a learning loop, registered in [`agents/registry.md`](agents/registry.md). Open: two overlaps (§4.1), two known defects (§4.2), the `anomaly → weekly-insight` link is designed but unbuilt (§2), and `data/` is still a static export. The final presentation is still a placeholder.
 
 ## The Numbers (canonical — don't re-derive, don't contradict)
 
@@ -78,7 +78,10 @@ The numbered folders are the certification's module scaffolding. **The real arti
 | `08-stakeholders/` | `marcus.md`, `raj.md`, `lena.md` — reader models. Read these *before* writing anything they'll read. Legend: 📁 cited · 🧩 given · 💭 inferred (verify) |
 | `data/` | 5 CSVs + `metric-diagnosis.md` (canonical analysis) + `experiment-design.md`. Booleans are the **strings** `'true'`/`'false'` — compare against `'true'` |
 | `skills/` | Reusable skills + the three recurring workflows — see the Workflows section below |
-| `ops/` | Recurring weekly output: `status/`, `research/` (+ `research/inbox/` — drop raw feedback here), `competitive/`. Dated files, one per run. Module folders hold one-time artifacts; recurring output goes here |
+| `agents/` | The Comeback Coach stack. **Start at [`registry.md`](agents/registry.md)** — name, trigger, sources, delivery, owner, connection plan, known gaps, 6-month roadmap. Then the per-agent `.md` spec + `.py` script pairs, plus `fixtures/` (4 deterministic scenarios for the diagnostic loop) |
+| `outcome-log.md` | `anomaly-diagnosis` output, one block per diagnosis. The blank **what actually happened** fields are the only thing that can calibrate its confidence scores — fill them in after running the SQL |
+| `reports/` | `weekly-insight` output, `YYYY-MM-DD.md`, one per Friday run. **Cuts against the `ops/` convention** — see `agents/weekly-insight.md` §0c |
+| `ops/` | Recurring weekly output: `status/`, `research/` (+ `research/inbox/` — drop raw feedback here), `competitive/`, `agent/` (agent digests + `agent/pulse/snapshots/`). Dated files, one per run. Module folders hold one-time artifacts; recurring output goes here |
 | `*/[module].md` | `orientation.md`, `research.md`, `build.md`, `collaboration.md`, `decide.md`, `systems.md` — **still blank `___` templates.** Ignore as sources; they're scaffolding, not content |
 
 Run the prototype: `.claude/launch.json` serves `03-build/prototype/` on port 4173.
@@ -104,9 +107,38 @@ Three one-paste workflows for my most repetitive tasks. Each runs with **no addi
 
 - [`skills/stakeholder-prd/SKILL.md`](skills/stakeholder-prd/SKILL.md) — writes a PRD grounded in this workspace's research and calibrated to the named people who have to approve it. Reads `08-stakeholders/` first.
 - [`skills/weekly-status.md`](skills/weekly-status.md) — the stakeholder-calibrated status **templates** and the per-reader calibration table. `friday-status` gathers evidence, then formats with these. Edit calibration here, not in `friday-status`.
+- [`skills/agent-learning-loop.md`](skills/agent-learning-loop.md) — weekly self-review of the agent stack's own track record. Scores past diagnoses in `outcome-log.md` as hit/miss/partial, computes hit rate by confidence band, proposes **one** heuristic update. Proposes only — never edits. **Returns "nothing to calibrate" until ~5 outcomes are filled in**, which is a human commitment, not a technical one.
 - [`skills/weekly-status/SKILL.md`](skills/weekly-status/SKILL.md) — the older generic four-section version (Shipped / In Progress / Blockers / Next Week). Superseded for Streakly use by the two above; kept because it's the Module 1 artifact. **Name collides with `weekly-status.md`** — see `workspace-audit.md` item A4.
 
 Nothing in `skills/` is in `.claude/skills/`, so none of it is invocable as a `/slash` command yet. The trigger prompts above are plain text pastes by design.
+
+### Agents — the Comeback Coach stack
+
+**Full detail lives in [`agents/registry.md`](agents/registry.md).** Read it before changing, scheduling, or quoting any agent. This section is the summary only.
+
+Four agents, all built and verified, **none scheduled** — run them manually.
+
+| Agent | Trigger | Covers | Writes |
+|---|---|---|---|
+| [`metric-pulse`](agents/metric-pulse.md) | Nightly 02:00, posts Mondays | Day-7 + streak-break, ±2pt alert, channel split | `ops/agent/pulse/` |
+| [`anomaly-diagnosis`](agents/anomaly-diagnosis.md) | **Event — chained from the pulse on alert** | 5 gated steps: threshold → metric tree → 3 ranked hypotheses → SQL → log. 3 of 5 steps can stop | `outcome-log.md`, `ops/agent/anomaly/` |
+| [`weekly-insight`](agents/weekly-insight.md) | Friday 16:00 | 3 done / 2 changed / 1 watch | `reports/YYYY-MM-DD.md` |
+| [`monday-retention`](agents/monday-retention.md) | Monday 08:00 | Day-7, streak-break, sessions/user, push opens | `ops/agent/` |
+
+Plus [`skills/agent-learning-loop.md`](skills/agent-learning-loop.md) — weekly self-review that scores past diagnoses hit/miss/partial and proposes **one** heuristic update. It proposes; it never edits.
+
+**How they connect.** `metric_pulse.py --chain-anomaly` invokes the diagnostic loop only when the pulse alerts — a function call, not a file handoff, so `ALERT_PTS` stays defined once in `metric_pulse.py` and raising it moves the digest badge and the anomaly trigger together. `weekly-insight` and `anomaly-diagnosis` both import their metric layer from `metric_pulse.py`, so no two agents can disagree about a number. **`anomaly-diagnosis` → `weekly-insight` is designed but NOT built** — Friday's report currently can't see Tuesday's diagnosis (registry §2, Link 2).
+
+**Six things to know before quoting any of them:**
+
+- **39% is a reference line, not a diff target.** It's the brief's post-v2 figure. The data's Day-7 is 38.6% overall, 37/37/31/27/61% by cohort week — no week equals 39%. All four compare against the **prior cohort week**.
+- **±2 pts is below the data's resolution.** Channel cells are n≈33 (one user ≈ 3 pts); at n=100, a −4-pt move carries p=0.533. Every agent prints the p-value next to the alert. **Read the p, not the arrow.**
+- **Week 5 is confounded** and all four guard against headlining it. A +34-pt Day-7 move reported *without* a confound note means the guard has broken.
+- **Confidence scores are ordinal weights, not probabilities.** At n=100 a hypothesis can clear the 6/10 gate on evidence no z-test would call significant; the output says so when it does. They stay uncalibrated until the outcome log has filled-in outcomes.
+- **`anomaly-diagnosis` can't diagnose** push *delivery* (no `delivered`/opt-in column), release regressions (no deploy/version field), or anything "overnight" (`cohort_week` grain only). It generates those hypotheses when the pattern fits but marks them unconfirmable rather than emitting SQL that can't run.
+- **`weekly-insight` can't report weekly NPS themes.** `02-research/nps-analysis.md` is an undated one-off of 10 comments. Weekly user signal comes from `ops/research/inbox/`, currently empty → the week is reported as quiet, never padded.
+
+**Two overlaps and two defects are open** — registry §4.1 and §4.2. Nothing should be scheduled until the overlaps are resolved and `data/` is a live source rather than a static export ending at the pilot week.
 
 ## Glossary
 
@@ -118,6 +150,9 @@ Nothing in `skills/` is in `.claude/skills/`, so none of it is invocable as a `/
 | **Breaker / non-breaker** | `broke_streak_week1` true/false. The pilot's lift is in non-breakers — the segment we weren't aiming at. |
 | **The descope** | Marcus approved 3 things; 1 was built. Recovery flow only; milestone moments and the state-aware home screen are not in the prototype. |
 | **Triad** | PM + Raj (eng) + Lena (design). |
+| **Metric tree** | The decomposition of Day-7 into behavioural drivers (streak-break, Day-1, sessions/user, push opens, goal-set). Day-7 is the thing decomposed, never a driver; channel is a *segmentation* of it, reported separately so movement isn't counted twice. |
+| **Confidence gate** | `anomaly-diagnosis` step 3: the top hypothesis must score **above** 6/10 to earn SQL. Exactly 6 stops the loop. The score is a rule-based ordinal weight, not a probability. |
+| **Outcome log** | `outcome-log.md`. One block per diagnosis that cleared the gate, with *what actually happened* left blank for a human. Those blanks are the only route from hand-tuned confidence weights to calibrated ones. |
 | **D-1 / D-7 / D-30** | Retention at day 1, 7, 30 after install. D-7 is this project's core metric. |
 | **Coach, not scorekeeper** | The framing users asked for in NPS. Drove the zen/acceptance tone in the prototype copy. |
 | **Roleplay test** | Synthetic persona testing against the prototype. Not user validation. Always labeled. |
