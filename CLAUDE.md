@@ -77,10 +77,36 @@ The numbered folders are the certification's module scaffolding. **The real arti
 | `07-docs/` | Catch-all for Modules 3–5 outputs: `prd.md`, `decision-brief.md`, `pm-brief.md`, `hypothesis.md`, `triad-session.md`, `spec-readiness.md`, `design-review.md`, `qa-checklist.md`, `objection-log.md`, `codebase-summary.md`, `recommendation-memo.md`, `presentation.md`, `presentation-notes.md` |
 | `08-stakeholders/` | `marcus.md`, `raj.md`, `lena.md` — reader models. Read these *before* writing anything they'll read. Legend: 📁 cited · 🧩 given · 💭 inferred (verify) |
 | `data/` | 5 CSVs + `metric-diagnosis.md` (canonical analysis) + `experiment-design.md`. Booleans are the **strings** `'true'`/`'false'` — compare against `'true'` |
-| `skills/` | `stakeholder-prd/SKILL.md`, `weekly-status/SKILL.md` (generic 4-section), `weekly-status.md` (stakeholder-calibrated variant — confusing name collision, see audit) |
+| `skills/` | Reusable skills + the three recurring workflows — see the Workflows section below |
+| `ops/` | Recurring weekly output: `status/`, `research/` (+ `research/inbox/` — drop raw feedback here), `competitive/`. Dated files, one per run. Module folders hold one-time artifacts; recurring output goes here |
 | `*/[module].md` | `orientation.md`, `research.md`, `build.md`, `collaboration.md`, `decide.md`, `systems.md` — **still blank `___` templates.** Ignore as sources; they're scaffolding, not content |
 
 Run the prototype: `.claude/launch.json` serves `03-build/prototype/` on port 4173.
+
+## Recurring Workflows
+
+Three one-paste workflows for my most repetitive tasks. Each runs with **no additional input from me** — don't ask me clarifying questions when I trigger one, just run it and report at the end.
+
+| Trigger (I paste this) | Skill | Reads | Writes |
+|---|---|---|---|
+| `Run the Friday status workflow in skills/friday-status.md.` | [`skills/friday-status.md`](skills/friday-status.md) | `git log` for the week, `change_log.md`, `objection-log.md`, `spec-readiness.md`, and the open items in this file | `ops/status/YYYY-MM-DD-status.md` |
+| `Run the research synthesis workflow in skills/weekly-research-synthesis.md.` | [`skills/weekly-research-synthesis.md`](skills/weekly-research-synthesis.md) | `ops/research/inbox/` + the `02-research/` baseline | `ops/research/YYYY-Www-research.md` |
+| `Run the competitive pulse workflow in skills/competitive-pulse.md.` | [`skills/competitive-pulse.md`](skills/competitive-pulse.md) | WebSearch across the 5 tracked apps, diffed against `competitive-matrix.md` | `ops/competitive/YYYY-MM-DD-pulse.md` |
+
+**Rules that apply to all three** — these are what make them safe to run unattended:
+
+- **They write only their own new dated file.** If it already exists, stop and ask rather than overwrite.
+- **They never edit a project artifact.** Not `competitive-matrix.md`, not `change_log.md`, not this file. Stale facts and proposed change-log rows get surfaced as a *proposal* at the end, and wait for me. This is the "ask before saving" rule holding even inside an autonomous run.
+- **They never pad a quiet week.** Empty research inbox → no output at all. No competitor moves → a five-line file. "Found nothing" is never reported as "nothing happened."
+- **They cut unverifiable claims.** The status workflow drops any item whose artifact isn't on disk and tells me what it cut; the pulse workflow won't report an undated claim as a move.
+
+### Other skills
+
+- [`skills/stakeholder-prd/SKILL.md`](skills/stakeholder-prd/SKILL.md) — writes a PRD grounded in this workspace's research and calibrated to the named people who have to approve it. Reads `08-stakeholders/` first.
+- [`skills/weekly-status.md`](skills/weekly-status.md) — the stakeholder-calibrated status **templates** and the per-reader calibration table. `friday-status` gathers evidence, then formats with these. Edit calibration here, not in `friday-status`.
+- [`skills/weekly-status/SKILL.md`](skills/weekly-status/SKILL.md) — the older generic four-section version (Shipped / In Progress / Blockers / Next Week). Superseded for Streakly use by the two above; kept because it's the Module 1 artifact. **Name collides with `weekly-status.md`** — see `workspace-audit.md` item A4.
+
+Nothing in `skills/` is in `.claude/skills/`, so none of it is invocable as a `/slash` command yet. The trigger prompts above are plain text pastes by design.
 
 ## Glossary
 
